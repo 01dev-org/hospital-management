@@ -1,4 +1,4 @@
-import  app  from "../App";
+import app from "../App";
 import DoctorService from "../services/DoctorService";
 import { rl } from "../interfaces/RL";
 import render from "../views/menuView"; 
@@ -22,15 +22,25 @@ class DoctorController {
           this.listDoctors();
           break;
         case "3":
-          console.log("Traitement pour approuver de(s) rendez-vous...");
-          this.run();
+          rl.question("Entrez l'ID du médecin : ", async (doctorId) => {
+            if (!doctorId.trim()) {
+              console.log("❌ L'ID du médecin est requis.");
+              return this.run();
+            }
+
+            const doctor = await this.findDoctor(doctorId);
+            if (doctor) {
+             console.table(doctor);
+            }
+            this.run();
+          });
           break;
         case "4":
-          console.log("Retour au menu principal...");
-          app()
+          console.log("🔙 Retour au menu principal...");
+          app();
           break;
         default:
-          console.log("Option invalide.");
+          console.log("⚠️ Option invalide.");
           this.run();
       }
     });
@@ -42,7 +52,7 @@ class DoctorController {
       rl.question("Prénom du médecin : ", (firstName) => {
         rl.question("Spécialité du médecin : ", (speciality) => {
           const newDoctor: IDoctor = {
-            id: (Math.random() * 10000).toFixed(0), 
+            id: (Math.random() * 10000).toFixed(0),
             lastName,
             firstName,
             speciality,
@@ -57,26 +67,33 @@ class DoctorController {
 
   async listDoctors() {
     const doctors = await this.doctorService.listDoctors();
-  
+
     if (doctors.length === 0) {
       console.log("⚠️ Aucun médecin disponible.");
     } else {
       console.log("\n📋 Liste des médecins :\n");
-  
+
       doctors.forEach((doctor) => {
-        const separator = "─".repeat(30); 
+        const separator = "─".repeat(30);
         console.log(separator);
-        console.log(`ID : ${doctor.id}`);
+        console.log(`🆔 ID : ${doctor.id}`);
         console.log(`🩺 Nom : ${doctor.firstName} ${doctor.lastName}`);
         console.log(`🏥 Spécialité : ${doctor.speciality}`);
         console.log(separator);
       });
     }
-  
     this.run();
   }
-  
-  
+
+  async findDoctor(id: string): Promise<IDoctor | null> {
+    const doctor = await this.doctorService.findDoctorById(id);
+
+    if (!doctor) {
+      console.log("❌ Médecin introuvable.");
+      return null;
+    }
+    return doctor;
+  }
 }
 
 export default DoctorController;

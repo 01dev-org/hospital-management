@@ -22,7 +22,6 @@ class PatientRepository {
     return true;
   }
 
-  
 }
 
 export default PatientRepository;

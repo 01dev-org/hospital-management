@@ -12,7 +12,7 @@ const render = {
         console.log(" === Gestion Medecin ===:");
         console.log("1. Ajouter un medecin");
         console.log("2. Afficher les medecin");
-        console.log("3. Approuver de(s) rendez-vous");
+        console.log("3. Rechercher un medecin");
         console.log("4. Retourner au menu principal");
     },
 

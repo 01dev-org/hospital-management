@@ -14,8 +14,4 @@ export class Appointment implements IAppointment {
         public patient: IPatient
     ){}
 
-    // cancelAppointment(): void{
-    //     this.status == "CANCELLED" 
-    //     console.log(`Le rendez-vous ${this.id} de ${this.patient.firstName} a été annulé.`);
-    // }
 }

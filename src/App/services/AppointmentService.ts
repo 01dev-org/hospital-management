@@ -14,6 +14,21 @@ class AppointmentService {
     return this.appointmentRepo.create(appointment);
   }
 
+  async validateAppointment(appointment: IAppointment): Promise<boolean> {
+    const existingAppointments = await this.appointmentRepo.list();
+    
+    const formattedDate = appointment.date.toISOString().split("T")[0]; 
+    
+    const existingAppointment = existingAppointments.find(
+      (existingApp) => 
+        existingApp.patient.id === appointment.patient.id && 
+        existingApp.date.toISOString().split("T")[0] === formattedDate 
+    );
+  
+    return !existingAppointment;
+  }
+  
+
   async getAppointments(): Promise<IAppointment[]> {
     return this.appointmentRepo.list();
   }
